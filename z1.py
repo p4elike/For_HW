@@ -38,11 +38,13 @@ cool_mentor.rate_hw(best_student, 'Python', 10)
 
 
 class Lecturer(Mentor):
-    def __init__(self):
+    def __init__(self, read_lectures, get_rate):
         self.read_lectures = []
         self.get_rate = []
+
+
 class Reviewer(Mentor):
     def __init__(self):
         self.check_homework = []
         self.rating_hw = []
-print(Reviewer)
+print(some_student)
