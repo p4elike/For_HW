@@ -155,4 +155,15 @@ Natasha_Ivanova.rate_lecturer(Ilnaz_Gilyazov, 'Git', 6 )
 Natasha_Ivanova.rate_lecturer(Ilnaz_Gilyazov, 'Git', 5 )
 
 
+student_list = []
+student_list.append(Natasha_Ivanova)
+student_list.append(Sasha_Vasin)
 
+def mean(list, course):
+    result = []
+    for student in list:
+        if course in student.grades.keys():
+            result.extend(student.grades[course])
+            mean_grade_course = sum(result) / len(result)
+            print(mean_grade_course)
+mean(student_list, 'Python')
