@@ -3,23 +3,31 @@ class Student:
         self.name = name
         self.surname = surname
         self.gender = gender
-        self.finished_courses = []
         self.courses_in_progress = []
+        self.finished_courses = []
         self.grades = {}
-        self.rate_lecturer = {}
 
-    def __set__(self):
+    def mean_grades(self):
+        grades_list = list(self.grades.values())
+        for m_grades in grades_list:
+            res = sum(m_grades) / len(m_grades)
+        return res
+    def __str__(self):
         res = (
-            f'Имя: = {self.name} \n Фамилия: = {self.surname} \n Средняя оценка за домашние задания: = {self.grades} \n'
-            f'Курсы в процессе изучения: = {self.courses_in_progress} \n Завершенные курсы: = {self.finished_courses} \n')
+            f'''Имя: = {self.name} 
+            Фамилия: = {self.surname}
+            Средняя оценка за домашние задания: = {self.mean_grades()} 
+            Курсы в процессе изучения: = {self.courses_in_progress} 
+            Завершенные курсы: = {self.finished_courses} \n'''
+        )
         return res
 
-    def rate_lecturer(self, lecturer, lesson, rate):
-        if isinstance(lecturer, Lecturer) and lesson in Lecturer.read_lectures:
-            if lesson in lecturer.rate:
-                lecturer.rate[lesson] += [rate]
+    def rate_lecturer(self, lecturer, cours, rate):
+        if isinstance(lecturer, Lecturer) and cours in self.courses_in_progress and cours in lecturer.read_lectures:
+            if cours in lecturer.rate:
+                lecturer.rate[cours] += [rate]
             else:
-                lecturer.rate[lesson] = [rate]
+                lecturer.rate[cours] = [rate]
         else:
             return 'Ошибка'
 
@@ -37,35 +45,39 @@ class Mentor:
 
 
 class Lecturer(Mentor):
-    def __init__(self, name, surname, read_lectures):
+    def __init__(self, name, surname):
         super().__init__(name, surname)
         self.read_lectures = []
-        self.get_rate = {}
+        self.rate = {}
 
 
     def __lt__(self, other):
         if not isinstance(other, Lecturer):
             return print('Not Lecturer')
-        return self.get_rate < other.get_rate
+        return other.rate > self.rate
 
-    def rate(self):
-        for rate in Student.rate_lecturer():
-            midlle_rate += rate
-            midlle_rate = rate / len(rate)
-        return midlle_rate
-    def __set__(self):
-        res = (f'Имя: = {self.name} \n Фамилия: = {self.surname} \n Средняя оценка за лекции: = {self.get_rate}')
+    def mean_rate(self):
+        rate_list = list(self.rate.values())
+        for m_rate in rate_list:
+            res = sum(m_rate) / len(m_rate)
+        return res
+    def __str__(self):
+        res = (f'''
+        Имя: = {self.name} 
+        Фамилия: = {self.surname} 
+        Cредняя оценка за лекции: = {self.mean_rate()}'''
+        )
         return res
 
 
 class Reviewer(Mentor):
-    def __init__(self, name, surname, check_homework):
-        super().__init__(self, name, surname)
+    def __init__(self, name, surname):
+        super().__init__(name, surname)
         self.check_homework = []
-        self.rating_hw = []
+
 
     def rating_hw(self, student, course, grade):
-        if isinstance(student, Student) and course in self.courses_attached and course in student.courses_in_progress:
+        if isinstance(student, Student) and course in self.check_homework and course in student.courses_in_progress:
             if course in student.grades:
                 student.grades[course] += [grade]
             else:
@@ -73,18 +85,73 @@ class Reviewer(Mentor):
         else:
             return 'Ошибка'
 
-    def __set__(self):
-        res = (f'Имя: = {self.name} \n Фамилия: = {self.surname} \n ')
+    def __str__(self):
+        res = (
+        f'''
+        Имя: = {self.name} 
+        Фамилия: = {self.surname}
+        ''')
         return res
 
-
+#Students
 Sasha_Vasin = Student('Sasha', 'Vasin', 'boy')
+Sasha_Vasin.courses_in_progress.append('Python')
+Sasha_Vasin.courses_in_progress.append('Git')
+
+
 Natasha_Ivanova = Student('Natasha', 'Ivanova', 'girl')
-
-Oleg_Bulygin = Lecturer('Oleg', 'Bulygin', 'Phython')
-Ilnaz_Gilyazov = Lecturer('Ilnaz', 'Gilyazov', 'Git')
-
-Alyona_Batitskaya = Reviewer('Alyona', 'Batitskaya', 'Git')
-Oleg_Bulygin1 = Lecturer('Oleg1', 'Bulygin1', 'Phython')
+Natasha_Ivanova.courses_in_progress.append('Python')
+Natasha_Ivanova.finished_courses.append('Git')
 
 
+#Oleg_Bulygin = Mentor('Oleg', 'Bulygin')
+#Ilnaz_Gilyazov = Mentor('Ilnaz', 'Gilyazov')
+#Elena_Nikitina = Mentor('Elena', 'Nikitina')
+
+
+#Lecturers
+Oleg_Bulygin = Lecturer('Oleg', 'Bulygin')
+Oleg_Bulygin.read_lectures.append('Python')
+
+Ilnaz_Gilyazov = Lecturer('Ilnaz', 'Gilyazov')
+Ilnaz_Gilyazov.read_lectures.append('Git')
+
+#Reviewers
+Alyona_Batitskaya = Reviewer('Alyona', 'Batitskaya')
+Alyona_Batitskaya.check_homework.append('Git')
+
+
+Alexander_Bardin = Reviewer('Alexander', 'Bardin')
+Alexander_Bardin.check_homework.append('Python')
+
+#Rating_hw
+Alexander_Bardin.rating_hw(Natasha_Ivanova, 'Python', 8)
+Alexander_Bardin.rating_hw(Natasha_Ivanova, 'Python', 8)
+Alexander_Bardin.rating_hw(Natasha_Ivanova, 'Python', 8)
+Alexander_Bardin.rating_hw(Sasha_Vasin, 'Python', 9)
+Alexander_Bardin.rating_hw(Sasha_Vasin, 'Python', 9)
+Alyona_Batitskaya.rating_hw(Natasha_Ivanova, 'Git', 8)
+Alyona_Batitskaya.rating_hw(Natasha_Ivanova, 'Git', 8)
+Alyona_Batitskaya.rating_hw(Natasha_Ivanova, 'Git', 9)
+Alyona_Batitskaya.rating_hw(Sasha_Vasin, 'Git', 9)
+Alyona_Batitskaya.rating_hw(Sasha_Vasin, 'Git', 10)
+
+
+#Rate Lecturers
+Sasha_Vasin.rate_lecturer(Oleg_Bulygin, 'Python', 10 )
+Sasha_Vasin.rate_lecturer(Oleg_Bulygin, 'Python', 10 )
+Sasha_Vasin.rate_lecturer(Oleg_Bulygin, 'Python', 10 )
+Sasha_Vasin.rate_lecturer(Oleg_Bulygin, 'Python', 10 )
+Sasha_Vasin.rate_lecturer(Ilnaz_Gilyazov, 'Git', 10 )
+Sasha_Vasin.rate_lecturer(Ilnaz_Gilyazov, 'Git', 10 )
+Sasha_Vasin.rate_lecturer(Ilnaz_Gilyazov, 'Git', 10 )
+
+Natasha_Ivanova.rate_lecturer(Oleg_Bulygin, 'Python', 7)
+Natasha_Ivanova.rate_lecturer(Oleg_Bulygin, 'Python', 8)
+Natasha_Ivanova.rate_lecturer(Oleg_Bulygin, 'Python', 6)
+Natasha_Ivanova.rate_lecturer(Oleg_Bulygin, 'Python', 7)
+Natasha_Ivanova.rate_lecturer(Ilnaz_Gilyazov, 'Git', 6 )
+Natasha_Ivanova.rate_lecturer(Ilnaz_Gilyazov, 'Git', 6 )
+Natasha_Ivanova.rate_lecturer(Ilnaz_Gilyazov, 'Git', 5 )
+
+print(Sasha_Vasin)
