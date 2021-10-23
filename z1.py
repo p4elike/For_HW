@@ -6,7 +6,8 @@ class Student:
         self.finished_courses = []
         self.courses_in_progress = []
         self.grades = {}
-        self.rate_lecturer = []
+        self.rate_lecturer = {}
+
     def __set__(self):
         res = (
             f'Имя: = {self.name} \n Фамилия: = {self.surname} \n Средняя оценка за домашние задания: = {self.grades} \n'
@@ -26,6 +27,8 @@ class Student:
         if not isinstance(other, Student):
             return print('Not Student')
         return self.grades < other.grades
+
+
 class Mentor:
     def __init__(self, name, surname):
         self.name = name
@@ -34,29 +37,34 @@ class Mentor:
 
 
 class Lecturer(Mentor):
-    def __init__(self, name, surname, read_lectures, get_rate):
+    def __init__(self, name, surname, read_lectures):
         super().__init__(name, surname)
         self.read_lectures = []
-        self.rate = []
+        self.get_rate = {}
+
 
     def __lt__(self, other):
         if not isinstance(other, Lecturer):
             return print('Not Lecturer')
-        return self.rate < other.rate
+        return self.get_rate < other.get_rate
 
+    def rate(self):
+        for rate in Student.rate_lecturer():
+            midlle_rate += rate
+            midlle_rate = rate / len(rate)
+        return midlle_rate
     def __set__(self):
         res = (f'Имя: = {self.name} \n Фамилия: = {self.surname} \n Средняя оценка за лекции: = {self.get_rate}')
         return res
 
 
-
 class Reviewer(Mentor):
-    def __init__(self, name, surname):
+    def __init__(self, name, surname, check_homework):
         super().__init__(self, name, surname)
         self.check_homework = []
         self.rating_hw = []
 
-    def rate_hw(self, student, course, grade):
+    def rating_hw(self, student, course, grade):
         if isinstance(student, Student) and course in self.courses_attached and course in student.courses_in_progress:
             if course in student.grades:
                 student.grades[course] += [grade]
@@ -65,26 +73,18 @@ class Reviewer(Mentor):
         else:
             return 'Ошибка'
 
-
-
     def __set__(self):
         res = (f'Имя: = {self.name} \n Фамилия: = {self.surname} \n ')
         return res
 
 
+Sasha_Vasin = Student('Sasha', 'Vasin', 'boy')
+Natasha_Ivanova = Student('Natasha', 'Ivanova', 'girl')
+
+Oleg_Bulygin = Lecturer('Oleg', 'Bulygin', 'Phython')
+Ilnaz_Gilyazov = Lecturer('Ilnaz', 'Gilyazov', 'Git')
+
+Alyona_Batitskaya = Reviewer('Alyona', 'Batitskaya', 'Git')
+Oleg_Bulygin1 = Lecturer('Oleg1', 'Bulygin1', 'Phython')
 
 
-
-
-
-
-
-best_student = Student('Ruoy', 'Eman', 'your_gender')
-best_student.courses_in_progress += ['Python']
-
-cool_mentor = Mentor('Some', 'Buddy')
-cool_mentor.courses_attached += ['Python']
-
-get_rate_lectures = Student.rate_lecturer('Some', 'Buddy', 'Python', '10')
-get_rete_HW = Reviewer.rate_hw('Ruoy', 'Eman','Python', '9')
-print(best_student)
