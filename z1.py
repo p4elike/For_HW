@@ -22,12 +22,12 @@ f'''Имя: = {self.name}
 )
         return res
 
-    def rate_lecturer(self, lecturer, cours, rate):
-        if isinstance(lecturer, Lecturer) and cours in self.courses_in_progress and cours in lecturer.read_lectures:
-            if cours in lecturer.rate:
-                lecturer.rate[cours] += [rate]
+    def rate_lecturer(self, lecturer, course, rate):
+        if isinstance(lecturer, Lecturer) and course in self.courses_in_progress and course in lecturer.read_lectures:
+            if course in lecturer.rate:
+                lecturer.rate[course] += [rate]
             else:
-                lecturer.rate[cours] = [rate]
+                lecturer.rate[course] = [rate]
         else:
             return 'Ошибка'
 
@@ -159,11 +159,27 @@ student_list = []
 student_list.append(Natasha_Ivanova)
 student_list.append(Sasha_Vasin)
 
-def mean(list, course):
+def mean_grade(list, course):
     result = []
+    mean_grade_course = 0
+    amount = 0
     for student in list:
+        amount += 1
         if course in student.grades.keys():
             result.extend(student.grades[course])
             mean_grade_course = sum(result) / len(result)
             print(mean_grade_course)
-mean(student_list, 'Python')
+mean_grade(student_list, 'Python')
+
+lectures_list=[]
+lectures_list.append(Oleg_Bulygin)
+lectures_list.append(Ilnaz_Gilyazov)
+
+def mean_rate(list, course):
+    result = []
+    for lectures in list:
+        if course in lectures.rate.keys():
+            result.extend(lectures.rate[course])
+            mean_rate_course = sum(result) / len(result)
+            print('Средний рейтинг лекторов: ',mean_rate_course)
+mean_rate(lectures_list, 'Python')
