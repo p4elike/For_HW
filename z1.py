@@ -10,16 +10,16 @@ class Student:
     def mean_grades(self):
         grades_list = list(self.grades.values())
         for m_grades in grades_list:
-            res = sum(m_grades) / len(m_grades)
-        return res
+            grades = sum(m_grades) / len(m_grades)
+        return grades
     def __str__(self):
         res = (
-            f'''Имя: = {self.name} 
-            Фамилия: = {self.surname}
-            Средняя оценка за домашние задания: = {self.mean_grades()} 
-            Курсы в процессе изучения: = {self.courses_in_progress} 
-            Завершенные курсы: = {self.finished_courses} \n'''
-        )
+f'''Имя: = {self.name} 
+Фамилия: = {self.surname}
+Средняя оценка за домашние задания: = {self.mean_grades()} 
+Курсы в процессе изучения: = {", ".join(self.courses_in_progress)} 
+Завершенные курсы: = {", ".join(self.finished_courses)} '''
+)
         return res
 
     def rate_lecturer(self, lecturer, cours, rate):
@@ -34,7 +34,7 @@ class Student:
     def __lt__(self, other):
         if not isinstance(other, Student):
             return print('Not Student')
-        return self.grades < other.grades
+        return self.mean_grades() < other.mean_grades()
 
 
 class Mentor:
@@ -54,7 +54,7 @@ class Lecturer(Mentor):
     def __lt__(self, other):
         if not isinstance(other, Lecturer):
             return print('Not Lecturer')
-        return other.rate > self.rate
+        return other.mean_rate() > self.mean_rate()
 
     def mean_rate(self):
         rate_list = list(self.rate.values())
@@ -63,10 +63,10 @@ class Lecturer(Mentor):
         return res
     def __str__(self):
         res = (f'''
-        Имя: = {self.name} 
-        Фамилия: = {self.surname} 
-        Cредняя оценка за лекции: = {self.mean_rate()}'''
-        )
+Имя: = {self.name} 
+Фамилия: = {self.surname} 
+Cредняя оценка за лекции: = {self.mean_rate()}'''
+)
         return res
 
 
@@ -88,8 +88,8 @@ class Reviewer(Mentor):
     def __str__(self):
         res = (
         f'''
-        Имя: = {self.name} 
-        Фамилия: = {self.surname}
+Имя: = {self.name} 
+Фамилия: = {self.surname}
         ''')
         return res
 
@@ -154,4 +154,5 @@ Natasha_Ivanova.rate_lecturer(Ilnaz_Gilyazov, 'Git', 6 )
 Natasha_Ivanova.rate_lecturer(Ilnaz_Gilyazov, 'Git', 6 )
 Natasha_Ivanova.rate_lecturer(Ilnaz_Gilyazov, 'Git', 5 )
 
-print(Sasha_Vasin)
+
+
