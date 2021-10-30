@@ -167,8 +167,8 @@ def mean_grade(list, course):
         amount += 1
         if course in student.grades.keys():
             result.extend(student.grades[course])
-            mean_grade_course = sum(result) / len(result)
-            print(mean_grade_course)
+        mean_grade_course += sum(result) / len(result)
+    print('Средняя оценка студентов: ', mean_grade_course/amount)
 mean_grade(student_list, 'Python')
 
 lectures_list=[]
@@ -177,9 +177,12 @@ lectures_list.append(Ilnaz_Gilyazov)
 
 def mean_rate(list, course):
     result = []
+    amount = 0
+    mean_rate_course = 0
     for lectures in list:
+        amount += 1
         if course in lectures.rate.keys():
             result.extend(lectures.rate[course])
-            mean_rate_course = sum(result) / len(result)
-            print('Средний рейтинг лекторов: ',mean_rate_course)
+        mean_rate_course += sum(result) / len(result)
+    print('Средний рейтинг лекторов: ', mean_rate_course / amount)
 mean_rate(lectures_list, 'Python')
